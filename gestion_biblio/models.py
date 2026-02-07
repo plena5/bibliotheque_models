@@ -18,7 +18,7 @@ class Habitant(models.Model):
         return f"{self.user.username}"
 
 class Categorie(models.Model):
-    id=models.BigAutoField(primary_key=True)
+    id=models.AutoField(primary_key=True)
     nom=models.CharField(max_length=100)
     def __str__(self):
         return f"{self.nom}"
@@ -42,20 +42,20 @@ class Ouvrage(models.Model):
     def __str__(self):
         return f"{self.titre} ({self.code})"
     
-    
+
 class Emprunt(models.Model):
-    STATUT_CHOICES = [
-        ('en_cours', 'En cours'),
-        ('retourne', 'Retourne'),
-        ('retard', 'En retard'),
-    ]
+    class Statut (models.TextChoices):
+       EN_COURS= 'en_cours', 'En cours',
+       RETOURNE='retourne', 'Retourne',
+       RETARD='retard', 'En retard'
+    
     id=models.BigAutoField(primary_key=True)
-    emprunteur = models.ForeignKey(Habitant, on_delete=models.PROTECT, related_name='emprunts')
-    livre = models.ForeignKey(Ouvrage, on_delete=models.PROTECT, related_name='emprunts')
+    emprunteur = models.ForeignKey(Habitant, on_delete=models.PROTECT)
+    livre = models.ForeignKey(Ouvrage, on_delete=models.PROTECT)
     date_emprunt = models.DateField(auto_now_add=True)
     date_limite_retour = models.DateField()
     date_reel_retour = models.DateField(blank=True, null=True)
-    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_cours')
+    statut = models.CharField(max_length=20,choices=Statut.choices,default=Statut.EN_COURS)
     amende = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
 
