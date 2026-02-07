@@ -27,11 +27,6 @@ class Categorie(models.Model):
     
 class Ouvrage(models.Model):
     
-    ETAT = [
-        ('neuf', 'Neuf'),
-        ('bon', 'Bon etat'),
-        ('abime', 'Abime'),
-    ]
     id=models.BigAutoField(primary_key=True)
     code = models.CharField(max_length=50, unique=True)
     titre = models.CharField(max_length=200)
@@ -40,7 +35,6 @@ class Ouvrage(models.Model):
     annee_publication = models.IntegerField()
     nombre_pages = models.IntegerField()
     langue = models.CharField(max_length=50)
-    etat = models.CharField(max_length=10, choices=ETAT, default='bon')
     disponible = models.BooleanField(default=True)
     date_ajout = models.DateField(auto_now_add=True)
     categorie=models.ForeignKey(Categorie,on_delete=models.PROTECT)
